@@ -6,3 +6,5 @@ Matricula: 202237115
 Nombre: Eduardo Isai Carmona Torreblanca
 
 Materia: Desarrollo de Aplicaciones Web
+
+Periodo: Otoño 2025
