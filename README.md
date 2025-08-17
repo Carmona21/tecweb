@@ -8,3 +8,5 @@ Nombre: Eduardo Isai Carmona Torreblanca
 Materia: Desarrollo de Aplicaciones Web
 
 Periodo: Otoño 2025
+
+En este repositorio se subiran todas las actividades y trabajos que se van a realizar durante todo el semestre
