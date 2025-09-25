@@ -31,4 +31,24 @@
         echo $num," impar ",$num2," par ",$num3," impar","<br>";
         echo $m*3," numeros obtenidos en ",$m," iteraciones";
     }
+
+    function ejercicio3($b){
+        $m = 0;
+        $matriz = [];
+        do{
+            
+            $num = mt_rand(0,1000);
+            $num2 = mt_rand(0,1000);
+            $num3 = mt_rand(0,1000);
+            $m++;
+            
+            $matriz[$m-1][0] = $num;
+            $matriz[$m-1][1] = $num2;
+            $matriz[$m-1][2] = $num3;
+            
+            
+        }while(($num % $b) != 0);
+
+        echo $num," es multiplo de ",$b,"<br>";
+    }
 ?>

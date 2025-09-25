@@ -6,22 +6,34 @@
     <title>Práctica 7</title>
 </head>
 <body>
+    <?php
+        include_once("src/funciones.php");
+    ?>
     <h2>Ejercicio 1</h2>
     <p>Escribir programa para comprobar si un número es un múltiplo de 5 y 7</p>
     <?php
 
-        include_once("src/funciones.php");
+        
         if (isset($_GET['num'])) {
             multiplos($_GET['num']);
         }
 
     ?>
+
     <h2>Ejercicio 2</h2>
     <p>Crea un programa para la generación repetitiva de 3 números aleatorios hasta obtener una
         secuencia compuesta por: impar, par, impar</p>
     <?php
-        include_once("src/funciones.php");
         ejercicio2();
+    ?>
+
+    <h2>Ejercicio 3</h2>
+    <p>Utiliza un ciclo while para encontrar el primer número entero obtenido aleatoriamente,
+    pero que además sea múltiplo de un número dado.</p>
+    <?php
+        if (isset($_GET['b'])) {
+            ejercicio3($_GET['b']);
+        }
     ?>
     <h2>Ejemplo de POST</h2>
     <form action="http://localhost/tecweb/practicas/p07/index.php" method="post">
