@@ -70,4 +70,12 @@
 
         echo '</table>';
     }
+
+    function ejercicio5($edad,$sexo){
+        if ($sexo == "femenino" && $edad >= 18 && $edad <= 35) {
+            echo '<h2>Bienvenida, usted está en el rango de edad permitido.</h2>';
+        } else {
+            echo '<h2>Lo sentimos, no cumple con los requisitos.</h2>';
+        }
+    }
 ?>
