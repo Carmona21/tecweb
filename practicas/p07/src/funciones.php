@@ -51,4 +51,23 @@
 
         echo $num," es multiplo de ",$b,"<br>";
     }
+
+    function ejercicio4(){
+        $arreglo = [];
+        for($i=97; $i<=122 ; $i++){
+            $arreglo[$i] = chr($i);
+        }
+
+        echo '<table border="1" cellspacing="0" cellpadding="5">';
+        echo '<tr><th>Índice</th><th>Valor</th></tr>';
+
+        foreach ($arreglo as $key => $value) {
+            echo '<tr>';
+            echo '<td>' . $key . '</td>';
+            echo '<td>' . $value . '</td>';
+            echo '</tr>';
+        }
+
+        echo '</table>';
+    }
 ?>
