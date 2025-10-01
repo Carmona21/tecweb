@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Práctica 3</title>
+    <title>Práctica 5</title>
 </head>
 <body>
     <h2>Ejercicio 1</h2>
@@ -32,7 +32,7 @@
     ?>
     <h2>Ejercicio 2</h2>
     <p>Proporcionar los valores de $a, $b, $c como sigue:</p>
-    <p>$a = “ManejadorSQL”,  $b = 'MySQL’,  $c = &$a</p>
+    <p>$a = “ManejadorSQL”,  $b = 'MySQL’,  $c = "&amp;"$a</p>
     <?php
         $a = "ManejadorSQL";
         $b = 'MySQL';
@@ -61,7 +61,7 @@
     <p>Muestra el contenido de cada variable inmediatamente después de cada asignación,
     verificar la evolución del tipo de estas variables (imprime todos los componentes de los
     arreglo):</p>
-    <p>$a = “PHP5”, $z[] = &$a,  $b = “5a version de PHP”, $c = $b*10, $a .= $b,
+    <p>$a = “PHP5”, $z[] = "&amp;"$a,  $b = “5a version de PHP”, $c = $b*10, $a .= $b,
         $b *= $c, $z[0] = “MySQL”
     </p>
     <?php
@@ -152,7 +152,7 @@
     ?>
     <h2>Ejercicio 6</h2>
     <p>Dar y comprobar el valor booleano de las variables $a, $b, $c, $d, $e y $f y muéstralas
-    usando la función var_dump(<datos>).
+    usando la función var_dump(datos).
     Después investiga una función de PHP que permita transformar el valor booleano de $c y $e
     en uno que se pueda mostrar con un echo:</p>
     <?php
@@ -199,5 +199,10 @@
         $idioma = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
         echo "Idioma principal del navegador: " . $idioma . "<br>";
     ?>
+
+    <p>
+    <a href="https://validator.w3.org/check?uri=referer"><img
+      src="https://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" /></a>
+  </p>
 </body>
 </html>
