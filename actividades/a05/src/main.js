@@ -148,3 +148,65 @@ function ejemplo9() {
             break;
     }
 }
+
+function ejemplo10(){
+    var x = 1;
+    var salida = "";
+
+    while (x <= 100) {
+        salida += x + "<br>";
+        x = x + 1;
+    }
+
+    document.getElementById("resultado10").innerHTML = salida;
+
+
+}
+
+function ejemplo11() {
+    var x = 1;
+    var suma = 0;
+    var valor;
+
+    while (x <= 5) {
+        valor = prompt('Ingresa el valor:', '');
+        valor = parseInt(valor);
+        suma = suma + valor;
+        x = x + 1;
+    }
+
+    document.getElementById("resultado11").innerHTML = "La suma de valores es " + suma + "<br>";
+}
+
+function ejemplo12() {
+    var valor;
+    do {
+        valor = prompt('Ingresa un valor entre 0 y 999', '');
+        valor = parseInt(valor);
+
+        document.getElementById("resultado12").innerHTML = 
+            "El valor " + valor +" tiene";
+        if (valor < 10) {
+            document.getElementById("resultado12").innerHTML =
+                "Tiene 1 digito";
+        } else {
+            if (valor < 100) {
+                document.getElementById("resultado12").innerHTML = document.getElementById("resultado12").innerHTML =
+                "Tiene 2 digitos";;
+            }else{
+                document.getElementById("resultado12").innerHTML =
+                "Tiene 3 digitos";
+            }
+            document.getElementById("resultado12").innerHTML =
+                "<br>";
+        }
+    } while (valor != 0);
+}
+
+function ejemplo13() {
+    var f;
+
+    for (f = 1; f <= 10; f++) {
+        document.getElementById("resultado13").innerHTML = f + "";
+    }
+}
