@@ -14,3 +14,23 @@ function getDatos()
 function ejemplo1() {
     document.getElementById("resultado1").innerHTML = "Hola Mundo";
 }
+
+function ejemplo2() {
+    var nombre = 'Eduardo';
+    var edad = 21;
+    var altura = 1.80;
+    var casado = false;
+    document.getElementById("resultado2").innerHTML =
+    "Nombre: " + nombre + "<br>" +
+    "Edad: " + edad + "<br>" +
+    "Altura: " + altura + "<br>" +
+    "Casado: " + casado;
+}
+
+function ejemplo3() {
+    var nombre = prompt('Ingresa tu nombre:', '');
+    var edad = prompt('Ingresa tu edad:', '');
+
+    document.getElementById("resultado3").innerHTML =
+        "Hola " + nombre + ", así que tienes " + edad + " años.";
+}
