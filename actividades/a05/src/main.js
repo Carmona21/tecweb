@@ -151,16 +151,11 @@ function ejemplo9() {
 
 function ejemplo10(){
     var x = 1;
-    var salida = "";
 
     while (x <= 100) {
-        salida += x + "<br>";
+        document.getElementById("resultado10").innerHTML += x + "<br>";
         x = x + 1;
     }
-
-    document.getElementById("resultado10").innerHTML = salida;
-
-
 }
 
 function ejemplo11() {
@@ -209,4 +204,90 @@ function ejemplo13() {
     for (f = 1; f <= 10; f++) {
         document.getElementById("resultado13").innerHTML = f + "";
     }
+}
+
+function ejemplo14() {
+    document.getElementById("resultado14").innerHTML = 
+        "Cuidado " + " Ingresatu documento correctamente " + "<br>"
+        + "Cuidado " + " Ingresatu documento correctamente " + "<br>" +
+        "Cuidado " + " Ingresatu documento correctamente " + "<br>";
+}
+
+function ejemplo15() {
+    function mostrarMensaje() {
+        document.getElementById("resultado15").innerHTML += 
+        "Cuidado " + " Ingresatu documento correctamente " + "<br>"
+    }
+    mostrarMensaje();
+    mostrarMensaje();
+    mostrarMensaje();
+}
+
+function ejemplo16(){
+    function mostrarRango(x1,x2) {
+        var inicio;
+        for(inicio = x1; inicio <= x2; inicio++){
+            document.getElementById("resultado16").innerHTML += inicio + "<br>";
+        }
+    }
+
+    var valor1,valor2;
+
+    valor1 = prompt('Ingresa el valor inferior:', '');
+    valor1 = parseInt(valor1);
+    valor2 = prompt('Ingresa el valor superior:', '');
+    valor2 = parseInt(valor2);
+
+    mostrarRango(valor1,valor2);
+}
+
+function ejemplo17() {
+    function convetirCastellano(x){
+        if (x == 1) {
+            return "uno";
+        }else{
+            if (x == 2) {
+                return "dos";
+            }else{
+                if (x == 3) {
+                    return "tres";
+                }else{
+                    if (x == 4) {
+                        return "cuatro";
+                    }else{
+                        if (x == 5) {
+                            return "cinco";
+                        }else{
+                            return "Valor incorrecto"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    var valor = prompt('Ingresa un valor entre 1 y 5', '');
+    valor = parseInt(valor);
+    var r = convetirCastellano(valor);
+    document.getElementById("resultado17").innerHTML = r;
+}
+
+function ejemplo18() {
+    function convetirCastellano(x){
+        
+        switch (x) {
+            case 1: return "uno";
+            case 2: return "dos";
+            case 3: return "tres";
+            case 4: return "cuatro";
+            case 5: return "cinco";
+
+            default: return "valor incorrecto"
+        }
+    }
+
+    var valor = prompt('Ingresa un valor entre 1 y 5', '');
+    valor = parseInt(valor);
+    var r = convetirCastellano(valor);
+    document.getElementById("resultado18").innerHTML = r;
 }
