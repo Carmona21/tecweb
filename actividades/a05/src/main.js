@@ -11,3 +11,6 @@ function getDatos()
     div2.innerHTML = '<h3> Edad: '+edad+'</h3>';
 }
 
+function ejemplo1() {
+    document.getElementById("resultado1").innerHTML = "Hola Mundo";
+}
