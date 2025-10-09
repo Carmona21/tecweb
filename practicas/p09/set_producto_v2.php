@@ -16,7 +16,6 @@ if ($link->connect_errno)
     /** NOTA: con @ se suprime el Warning para gestionar el error por medio de código */
 }
 
-
 // Validar que los campos no estén vacíos
 if (empty($nombre) || empty($marca) || empty($modelo)) {
     die('<h3>Debes llenar todos los campos obligatorios.</h3>');
@@ -56,7 +55,9 @@ if (move_uploaded_file($_FILES["imagen"]["tmp_name"], $rutaDestino)) {
     die('<h3>Error al subir la imagen.</h3>');
 }
 
-// Insertar producto
+// $sql = "INSERT INTO productos (nombre, marca, modelo, precio, detalles, unidades, imagen, eliminado)
+//         VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+
 $sql = "INSERT INTO productos (nombre, marca, modelo, precio, detalles, unidades, imagen)
         VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -66,7 +67,7 @@ $stmt->bind_param("sssdsis", $nombre, $marca, $modelo, $precio, $detalles, $unid
 if ($stmt->execute()) {
     echo "<h2>Producto insertado correctamente</h2>";
 } else {
-    echo "<h3> Error al insertar el producto: {$stmt->error}</h3>";
+    echo "<h3>Error al insertar el producto: {$stmt->error}</h3>";
 }
 
 $stmt->close();
