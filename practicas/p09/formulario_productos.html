@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+</head>
+<body>
+    <h1>Registro de nuevos productos</h1>
+
+    <form id="formulario" action="set_producto_v2.php" method="post" enctype="multipart/form-data">
+        <fieldset>
+            <legend>Detalles del Producto</legend>
+            <ul style="list-style: none; padding: 0;">
+                <li>
+                    <label for="form-nombre">Nombre del Producto:</label>
+                    <input type="text" name="nombre_producto" id="form-nombre" required>
+                </li>
+                <li>
+                    <label for="form-marca">Marca del Producto:</label>
+                    <input type="text" name="marca_producto" id="form-marca" required>
+                </li>
+                <li>
+                    <label for="form-modelo">Modelo del Producto:</label>
+                    <input type="text" name="modelo_producto" id="form-modelo" required>
+                </li>
+                <li>
+                    <label for="form-precio">Precio del Producto:</label>
+                    <input type="number" name="precio" id="form-precio" step="0.01" required>
+                </li>
+                <li>
+                    <label for="form-unidades">Unidades del Producto:</label>
+                    <input type="number" name="unidades" id="form-unidades" required>
+                </li>
+                <li>
+                    <label for="form-detalles">Detalles del Producto:</label><br>
+                    <textarea name="detalles_producto" rows="4" cols="60" id="form-detalles" placeholder="No más de 300 caracteres"></textarea>
+                </li>
+                <li>
+                    <label for="form-imagen">Imagen del Producto:</label>
+                    <input type="file" name="imagen" id="form-imagen" accept="image/*" required>
+                </li>
+            </ul>
+            <p>
+                <input type="submit" value="Increíble">
+                <input type="reset">
+            </p>
+        </fieldset>
+    </form>
+</body>
+</html>
