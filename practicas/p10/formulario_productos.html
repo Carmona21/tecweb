@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Productos</title>
+
+  <script>
+    function verificarNombre(control) {
+      const nombre = control.value.trim();
+      if (nombre === '' || nombre.length > 100) {
+        alert('El nombre es obligatorio y debe tener 100 caracteres o menos.');
+        control.focus();
+        return false;
+      }
+      return true;
+    }
+
+    function verificarMarca(control) {
+      const marca = control.value.trim();
+      if (marca === '') {
+        alert('Debe seleccionar una marca de la lista.');
+        control.focus();
+        return false;
+      }
+      return true;
+    }
+
+    function verificarModelo(control) {
+      const modelo = control.value.trim();
+      const regex = /^[a-zA-Z0-9]+$/; // alfanumérico
+      if (modelo === '' || !regex.test(modelo) || modelo.length > 25) {
+        alert('El modelo debe ser alfanumérico y tener máximo 25 caracteres.');
+        control.focus();
+        return false;
+      }
+      return true;
+    }
+
+    function verificarPrecio(control) {
+      const precio = parseFloat(control.value);
+      if (isNaN(precio) || precio <= 99.99) {
+        alert('El precio debe ser un número mayor a 99.99.');
+        control.focus();
+        return false;
+      }
+      return true;
+    }
+
+    function verificarDetalles(control) {
+      const detalles = control.value.trim();
+      if (detalles.length > 250) {
+        alert('Los detalles no deben exceder los 250 caracteres.');
+        control.focus();
+        return false;
+      }
+      return true;
+    }
+
+    function verificarUnidades(control) {
+      const unidades = parseInt(control.value);
+      if (isNaN(unidades) || unidades < 0) {
+        alert('Las unidades deben ser un número mayor o igual a 0.');
+        control.focus();
+        return false;
+      }
+      return true;
+    }
+
+    function verificarImagen(control) {
+      if (control.value.trim() === '') {
+        control.value = "img/imagen.png";
+      }
+      return true;
+    }
+
+    // Validar todo el formulario antes de enviar
+    function validarFormulario() {
+      const nombre = document.getElementById('form-nombre');
+      const marca = document.getElementById('form-marca');
+      const modelo = document.getElementById('form-modelo');
+      const precio = document.getElementById('form-precio');
+      const detalles = document.getElementById('form-detalles');
+      const unidades = document.getElementById('form-unidades');
+      const imagen = document.getElementById('form-imagen');
+
+      if (!verificarNombre(nombre)) return false;
+      if (!verificarMarca(marca)) return false;
+      if (!verificarModelo(modelo)) return false;
+      if (!verificarPrecio(precio)) return false;
+      if (!verificarDetalles(detalles)) return false;
+      if (!verificarUnidades(unidades)) return false;
+      if (!verificarImagen(imagen)) return false;
+
+      return true;
+    }
+  </script>
+</head>
+<body>
+  <h1>Registro de nuevos productos</h1>
+
+  <form id="formulario" action="set_producto_v2.php" method="post" enctype="multipart/form-data" onsubmit="return validarFormulario();">
+    <fieldset>
+      <legend>Detalles del Producto</legend>
+      <ul style="list-style: none; padding: 0;">
+        <li>
+          <label for="form-nombre">Nombre del Producto:</label>
+          <input type="text" name="nombre_producto" id="form-nombre">
+        </li>
+        <li>
+          <label for="form-marca">Marca del Producto:</label>
+          <select name="marca_producto" id="form-marca">
+            <option value="">--Seleccione una marca--</option>
+            <option value="Samsung">Samsung</option>
+            <option value="Apple">Apple</option>
+            <option value="Sony">Sony</option>
+            <option value="Huawei">Huawei</option>
+          </select>
+        </li>
+        <li>
+          <label for="form-modelo">Modelo del Producto:</label>
+          <input type="text" name="modelo_producto" id="form-modelo">
+        </li>
+        <li>
+          <label for="form-precio">Precio del Producto:</label>
+          <input type="number" name="precio" id="form-precio" step="0.01">
+        </li>
+        <li>
+          <label for="form-unidades">Unidades del Producto:</label>
+          <input type="number" name="unidades" id="form-unidades">
+        </li>
+        <li>
+          <label for="form-detalles">Detalles del Producto:</label><br>
+          <textarea name="detalles_producto" rows="4" cols="60" id="form-detalles" placeholder="No más de 250 caracteres"></textarea>
+        </li>
+        <li>
+          <label for="form-imagen">Imagen del Producto:</label>
+          <input type="file" name="imagen" id="form-imagen" accept="image/*">
+        </li>
+      </ul>
+      <p>
+        <input type="submit" value="Registrar Producto">
+        <input type="reset" value="Limpiar">
+      </p>
+    </fieldset>
+  </form>
+</body>
+</html>
