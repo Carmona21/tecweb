@@ -5,23 +5,27 @@ if ($link->connect_errno) {
     die('Error al conectar con la base de datos: ' . $link->connect_error);
 }
 
-$id = $_POST['id'];
-$nombre = $_POST['nombre'];
-$marca = $_POST['marca'];
-$modelo = $_POST['modelo'];
-$precio = $_POST['precio'];
-$unidades = $_POST['unidades'];
-$detalles = $_POST['detalles'];
-$imagen = $_POST['imagen'];
+$id       = (int)$_POST['id'];
+$nombre   = $link->real_escape_string($_POST['nombre']);
+$marca    = $link->real_escape_string($_POST['marca']);
+$modelo   = $link->real_escape_string($_POST['modelo']);
+$precio   = (float)$_POST['precio'];
+$unidades = (int)$_POST['unidades'];
+$detalles = $link->real_escape_string($_POST['detalles']);
+$imagen   = $link->real_escape_string($_POST['imagen']);
 
 $sql = "UPDATE productos 
-        SET nombre='$nombre', marca='$marca', modelo='$modelo',
-            precio=$precio, unidades=$unidades, detalles='$detalles', imagen='$imagen'
+        SET nombre='$nombre', 
+            marca='$marca', 
+            modelo='$modelo',
+            precio=$precio, 
+            unidades=$unidades, 
+            detalles='$detalles', 
+            imagen='$imagen'
         WHERE id=$id";
 
 if ($link->query($sql)) {
-    echo "<script>alert('Producto actualizado correctamente.');
-          window.location.href='get_productos_xhtml_v2.php';</script>";
+    echo "<script>alert('Producto actualizado correctamente.');</script>";
 } else {
     echo "Error al actualizar: " . $link->error;
 }
