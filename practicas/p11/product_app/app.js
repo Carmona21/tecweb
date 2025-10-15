@@ -60,6 +60,7 @@ function buscarID(e) {
     client.send("id="+id);
 }
 
+
 // FUNCIÓN CALLBACK DE BOTÓN "Agregar Producto"
 function agregarProducto(e) {
     e.preventDefault();
