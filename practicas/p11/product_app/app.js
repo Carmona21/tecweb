@@ -60,6 +60,59 @@ function buscarID(e) {
     client.send("id="+id);
 }
 
+// FUNCIÓN CALLBACK DE BOTÓN "Buscar" POR TERMINO
+function buscarProducto(e) {
+    e.preventDefault();
+
+    // SE OBTIENE EL TÉRMINO A BUSCAR
+    var searchTerm = document.getElementById('searchProducto').value;
+
+    // SE CREA EL OBJETO DE CONEXIÓN ASÍNCRONA AL SERVIDOR
+    var client = getXMLHttpRequest();
+    client.open('POST', './backend/read.php', true);
+    client.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    client.onreadystatechange = function () {
+        // SE VERIFICA SI LA RESPUESTA ESTÁ LISTA Y FUE SATISFACTORIA
+        if (client.readyState == 4 && client.status == 200) {
+            console.log('[CLIENTE - Buscar por término]\n'+client.responseText);
+            
+            // SE OBTIENE EL ARRAY DE DATOS A PARTIR DE UN STRING JSON
+            let productos = JSON.parse(client.responseText);
+            
+            // SE VERIFICA SI EL ARRAY JSON TIENE DATOS
+            if(productos.length > 0) {
+                let template = '';
+    
+                // SE ITERA SOBRE CADA PRODUCTO EN EL ARRAY
+                productos.forEach(function(producto) {
+                    // SE CREA UNA LISTA HTML CON LA DESCRIPCIÓN DEL PRODUCTO
+                    let descripcion = '';
+                        descripcion += '<li>precio: '+producto.precio+'</li>';
+                        descripcion += '<li>unidades: '+producto.unidades+'</li>';
+                        descripcion += '<li>modelo: '+producto.modelo+'</li>';
+                        descripcion += '<li>marca: '+producto.marca+'</li>';
+                        descripcion += '<li>detalles: '+producto.detalles+'</li>';
+                    
+                    // SE CREA UNA FILA POR CADA PRODUCTO
+                    template += `
+                        <tr>
+                            <td>${producto.id}</td>
+                            <td>${producto.nombre}</td>
+                            <td><ul>${descripcion}</ul></td>
+                        </tr>
+                    `;
+                });
+
+                // SE INSERTA LA PLANTILLA EN EL ELEMENTO CON ID "productos"
+                document.getElementById("productos").innerHTML = template;
+
+            } else {
+                document.getElementById("productos").innerHTML = '<tr><td colspan="3">No se encontraron productos</td></tr>';
+            }
+        }
+    };
+    client.send("search="+searchTerm);
+}
 
 // FUNCIÓN CALLBACK DE BOTÓN "Agregar Producto"
 function agregarProducto(e) {
@@ -71,6 +124,59 @@ function agregarProducto(e) {
     var finalJSON = JSON.parse(productoJsonString);
     // SE AGREGA AL JSON EL NOMBRE DEL PRODUCTO
     finalJSON['nombre'] = document.getElementById('name').value;
+
+    // VALIDACIONES
+        let isValid = true;
+        let errors = [];
+
+        // Validar nombre
+        if (!finalJSON.nombre || finalJSON.nombre.length > 100) {
+            errors.push('El nombre es obligatorio y debe tener 100 caracteres o menos.');
+            isValid = false;
+        }
+        
+        // Validar marca
+        if (!finalJSON.marca || finalJSON.marca === 'NA') {
+            errors.push('Debes seleccionar una marca válida');
+            isValid = false;
+        }
+        
+        // Validar modelo
+        const modeloPattern = /^[a-zA-Z0-9\s\-]+$/;
+        if (!finalJSON.modelo || !modeloPattern.test(finalJSON.modelo) || finalJSON.modelo.length > 25) {
+            errors.push('El modelo debe ser alfanumérico y tener máximo 25 caracteres.');
+            isValid = false;
+        }
+        
+        // Validar precio
+        if (!finalJSON.precio || parseFloat(finalJSON.precio) <= 99.99) {
+            errors.push('El precio debe ser mayor a $99.99');
+            isValid = false;
+        }
+        
+        // Validar detalles
+        if (finalJSON.detalles && finalJSON.detalles.length > 250) {
+            errors.push('Los detalles no deben exceder 250 caracteres');
+            isValid = false;
+        }
+        
+        // Validar unidades
+        if (!finalJSON.unidades || parseInt(finalJSON.unidades) < 0) {
+            errors.push('Las unidades deben ser un número mayor o igual a 0.');
+            isValid = false;
+        }
+
+        // Si hay errores, mostrarlos y no enviar
+        if (!isValid) {
+            alert('Errores en el formulario:\n\n' + errors.join('\n'));
+            console.log('Formulario tiene errores, no se enviará');
+            return;
+        }
+
+        // Usar imagen por defecto si no se proporciona una
+        if (!finalJSON.imagen || finalJSON.imagen.trim() === '' || finalJSON.imagen === 'img/default.png') {
+            finalJSON.imagen = 'img/imagen.png';
+        }
     // SE OBTIENE EL STRING DEL JSON FINAL
     productoJsonString = JSON.stringify(finalJSON,null,2);
 
