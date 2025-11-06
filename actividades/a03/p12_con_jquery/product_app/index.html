@@ -3,12 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <title>ProductApp</title>
-    <!-- BOOTSTRAP 4  -->
     <link rel="stylesheet" href="https://bootswatch.com/4/superhero/bootstrap.min.css">
   </head>
   <body>
 
-    <!-- BARRA DE NAVEGACIÓN  -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href=".">ProductApp</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
@@ -30,7 +28,6 @@
           <div class="card">
             <div class="card-body">
 
-              <!-- FORMULARIO PARA AGREGAR PRODUCTO -->
               <form id="product-form">
                 <input type="hidden" id="productId">
 
@@ -78,18 +75,13 @@
 
               <div id="estado_global" class="mt-3 text-info"></div>
 
-              <!-- BARRA DE ESTADO GLOBAL -->
-              <div id="estado_global" class="mt-3 text-info"></div>
-
             </div>
           </div>
         </div>
 
-        <!-- TABLA  -->
         <div class="col-md-7">
           <div class="card my-4" id="product-result">
             <div class="card-body">
-              <!-- RESULTADO -->
               <ul id="container"></ul>
             </div>
           </div>
@@ -109,7 +101,6 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <!-- Lógica del Frontend -->
     <script src="app.js"></script>
   </body>
 </html>
