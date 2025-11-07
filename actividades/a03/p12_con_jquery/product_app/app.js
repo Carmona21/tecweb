@@ -10,41 +10,120 @@ $(document).ready(function() {
 
     // --- FUNCIÓN PARA LISTAR PRODUCTOS ---
     function listarProductos() {
-        // ... (Tu código de listarProductos va aquí, sin cambios) ...
+        $.ajax({
+            url: './backend/product-list.php',
+            type: 'GET',
+            success: function(response) {
+                const productos = JSON.parse(response);
+                if (Object.keys(productos).length > 0) {
+                    let template = '';
+                    productos.forEach(producto => {
+                        // Usamos los nombres correctos de la BD
+                        let descripcion = '';
+                        descripcion += '<li>precio: ' + producto.precio + '</li>';
+                        descripcion += '<li>unidades: ' + producto.unidades + '</li>';
+                        descripcion += '<li>modelo: ' + producto.modelo + '</li>';
+                        descripcion += '<li>marca: ' + producto.marca + '</li>';
+                        descripcion += '<li>detalles: ' + producto.detalles + '</li>';
+
+                        template += `
+                            <tr productId="${producto.id}">
+                                <td>${producto.id}</td>
+                                <td><a href="#" class="product-item">${producto.nombre}</a></td>
+                                <td><ul>${descripcion}</ul></td>
+                                <td>
+                                    <button class="product-delete btn btn-danger">
+                                        Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    $('#products').html(template);
+                }
+            }
+        });
     }
 
     // --- BÚSQUEDA (Tu lógica original) ---
     $('#search').keyup(function() {
-        // ... (Tu código de búsqueda va aquí, sin cambios) ...
-    });
+        if ($('#search').val()) {
+            let search = $('#search').val();
+            $.ajax({
+                url: './backend/product-search.php?search=' + search,
+                data: { search },
+                type: 'GET',
+                success: function (response) {
+                    if(!response.error) {
+                        const productos = JSON.parse(response);
+                        if(Object.keys(productos).length > 0) {
+                            let template = '';
+                            let template_bar = '';
 
+                            productos.forEach(producto => {
+                                let descripcion = '';
+                                descripcion += '<li>precio: '+producto.precio+'</li>';
+                                descripcion += '<li>unidades: '+producto.unidades+'</li>';
+                                descripcion += '<li>modelo: '+producto.modelo+'</li>';
+                                descripcion += '<li>marca: '+producto.marca+'</li>';
+                                descripcion += '<li>detalles: '+producto.detalles+'</li>';
+                            
+                                template += `
+                                    <tr productId="${producto.id}">
+                                        <td>${producto.id}</td>
+                                        <td><a href="#" class="product-item">${producto.nombre}</a></td>
+                                        <td><ul>${descripcion}</ul></td>
+                                        <td>
+                                            <button class="product-delete btn btn-danger">
+                                                Eliminar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+
+                                template_bar += `
+                                    <li>${producto.nombre}</il>
+                                `;
+                            });
+                            $('#product-result').show();
+                            $('#container').html(template_bar);
+                            $('#products').html(template);    
+                        }
+                    }
+                }
+            });
+        } else {
+            $('#product-result').hide();
+            listarProductos(); // Recarga la lista si la búsqueda está vacía
+        }
+    });
 
     // --- ¡NUEVO! INSTRUCCIÓN 5: VALIDACIÓN ASÍNCRONA DE NOMBRE ---
     $('#nombre').keyup(function() {
-        // Solo verificamos si hay algo escrito
         if ($('#nombre').val()) {
             let nombre = $('#nombre').val();
-            // Obtenemos el ID del producto (será 0 si es nuevo, o un valor si se está editando)
+            // Obtenemos el ID del producto (0 si es nuevo, o un valor si se edita)
             let id = $('#productId').val() || 0; 
 
-            // Llamada AJAX al nuevo script
+            // Llamada AJAX al nuevo script 'product-check-name.php'
             $.post('./backend/product-check-name.php', { nombre: nombre, id: id }, (response) => {
-                
-                // Convertimos la respuesta JSON en un objeto
                 let respuesta = JSON.parse(response);
 
                 // Mostramos el mensaje de estado debajo del campo 'nombre'
                 if (respuesta.existe) {
                     $('#estado_nombre').text('Este nombre de producto ya existe.');
-                    $('#estado_nombre').removeClass('text-success').addClass('text-danger');
+                    // Cambiamos el color a rojo (peligro)
+                    $('#estado_nombre').removeClass('text-success text-warning').addClass('text-danger');
                 } else {
                     $('#estado_nombre').text('Nombre disponible.');
-                    $('#estado_nombre').removeClass('text-danger').addClass('text-success');
+                    // Cambiamos el color a verde (éxito)
+                    $('#estado_nombre').removeClass('text-danger text-warning').addClass('text-success');
                 }
             });
         } else {
             // Si el campo está vacío, limpiamos el mensaje
             $('#estado_nombre').text('');
+            $('#estado_nombre').removeClass('text-success text-danger').addClass('text-warning');
         }
     });
     // --- FIN DE LA SECCIÓN NUEVA ---
@@ -52,53 +131,129 @@ $(document).ready(function() {
 
     // --- INSTRUCCIONES 3.1 y 4: VALIDACIÓN DE CAMPOS (al salir del foco) ---
     $('#product-form input').blur(function() {
-        // Evitamos que la validación de 'requerido' se active en 'nombre'
-        // si ya tiene un mensaje de la validación asíncrona.
-        if ($(this).attr('id') === 'nombre' && $('#estado_nombre').text() !== '') {
-            return; 
-        }
+        // Validamos el campo usando la función
         validarCampo(this);
     });
 
-    // --- FUNCIÓN DE SUBMIT DEL FORMULARIO ---
+    // --- FUNCIÓN DE SUBMIT DEL FORMULARIO (Instrucciones 2, 3.2) ---
     $('#product-form').submit(e => {
-        // ... (Tu código de submit va aquí, sin cambios) ...
-        // ... (Asegúrate de que la validación aquí adentro siga funcionando) ...
+        e.preventDefault();
+
+        let formularioValido = true;
+        // Validamos solo los 'required' del HTML
+        $('#product-form input[required]').each(function() {
+            if (!validarCampo(this)) {
+                formularioValido = false;
+            }
+        });
+
+        // Revisamos también que el nombre no esté marcado como 'ya existe'
+        if ($('#estado_nombre').hasClass('text-danger')) {
+            formularioValido = false;
+            $('#estado_global').text('El nombre del producto ya existe, por favor cámbialo.');
+            return;
+        }
+
+        if (!formularioValido) {
+            $('#estado_global').text('Por favor, corrige los campos requeridos.');
+            return; // Detiene el envío
+        } else {
+            $('#estado_global').text('');
+        }
+        
+        const postData = {
+            id: $('#productId').val(),
+            nombre: $('#nombre').val(),
+            marca: $('#marca').val(),
+            modelo: $('#modelo').val(),
+            precio: $('#precio').val(),
+            unidades: $('#unidades').val(),
+            detalles: $('#detalles').val(),
+            imagen: $('#imagen').val()
+        };
+
+        const url = edit === false ? './backend/product-add.php' : './backend/product-edit.php';
+
+        $.post(url, postData, (response) => {
+            let respuesta = JSON.parse(response);
+
+            // Mostrar mensaje de éxito/error en la barra global
+            $('#estado_global').text(respuesta.message);
+
+            if (respuesta.status === 'success') {
+                listarProductos();
+                reiniciarFormulario();
+            }
+        });
     });
 
     // --- ELIMINAR PRODUCTO ---
     $(document).on('click', '.product-delete', (e) => {
-        // ... (Tu código de eliminar va aquí, sin cambios) ...
+        if (confirm('¿Realmente deseas eliminar el producto?')) {
+            const element = $(e.target).closest('tr');
+            const id = $(element).attr('productId');
+            $.post('./backend/product-delete.php', { id }, (response) => {
+                listarProductos();
+            });
+        }
     });
 
-    // --- CARGAR PRODUCTO EN FORMULARIO ---
+    // --- CARGAR PRODUCTO EN FORMULARIO (Actualizado para campos) ---
     $(document).on('click', '.product-item', (e) => {
-        // ... (Tu código de cargar producto va aquí, sin cambios) ...
-        
-        // Importante: Limpiamos los estados de error al cargar un producto
-        $('#product-form small').text('');
+        e.preventDefault(); 
+        const element = $(e.target).closest('tr');
+        const id = $(element).attr('productId');
+
+        $.post('./backend/product-single.php', { id }, (response) => {
+            let product = JSON.parse(response);
+
+            $('#productId').val(product.id);
+            $('#nombre').val(product.nombre);
+            $('#marca').val(product.marca);
+            $('#modelo').val(product.modelo);
+            $('#precio').val(product.precio);
+            $('#unidades').val(product.unidades);
+            $('#detalles').val(product.detalles);
+            $('#imagen').val(product.imagen);
+
+            edit = true;
+            $('#btn-submit').text('Actualizar Producto');
+            // Limpiamos todos los mensajes de estado al cargar un producto
+            $('#product-form small').text('');
+            $('#estado_global').text('');
+        });
     });
 
     // --- FUNCIONES AUXILIARES ---
 
     /**
-     * Valida un campo individual (Instrucción 3.1 y 4)
+     * Valida un campo individual
      */
     function validarCampo(campo) {
         let esRequerido = $(campo).prop('required');
         let valor = $(campo).val();
         let $estado = $(campo).next('small'); // El <small> asociado
 
+        // Si el campo es 'nombre' y ya tiene un mensaje de 'keyup', no hacemos nada
+        if ($(campo).attr('id') === 'nombre' && $estado.text() !== '') {
+             // A menos que esté vacío, en ese caso sí mostramos "requerido"
+             if (valor.trim() === '') {
+                $estado.text('Este campo es requerido.');
+                $estado.removeClass('text-success text-danger').addClass('text-warning');
+                return false;
+             }
+             // Si no está vacío, confiamos en el mensaje de 'keyup'
+             return !$estado.hasClass('text-danger');
+        }
+
+        // Validación normal para los demás campos
         if (esRequerido && valor.trim() === '') {
-            $estado.text('Este campo es requerido.'); // Muestra el mensaje
-            $estado.removeClass('text-success').addClass('text-warning');
+            $estado.text('Este campo es requerido.');
+            $estado.removeClass('text-success text-danger').addClass('text-warning');
             return false;
         }
 
-        // No borramos el mensaje del campo 'nombre' si es de la validación asíncrona
-        if ($(campo).attr('id') !== 'nombre') {
-             $estado.text(''); // Limpiar estado si es válido
-        }
+        $estado.text(''); // Limpiar estado si es válido
         return true;
     }
 
@@ -110,8 +265,10 @@ $(document).ready(function() {
         $('#product-form').trigger('reset');
         $('#productId').val('');
         $('#btn-submit').text('Agregar Producto');
-        // Se elimina la línea que borraba el estado global
+        // Limpiamos todos los mensajes de estado
         $('#product-form small').text('');
+        // Restauramos los colores por defecto
+        $('#product-form small').removeClass('text-success text-danger').addClass('text-warning');
     }
 
 });
