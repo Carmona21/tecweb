@@ -3,20 +3,26 @@ namespace TECWEB\MYAPI;
 
 abstract class DataBase {
     protected $conexion;
+    protected $data;
 
-    public function __construct($db, $user, $pass) {
-        // El orden correcto es: Host, Usuario, Password, Base de Datos, Puerto
+    // Según el UML: user, pass, db
+    public function __construct($user, $pass, $db) {
+        $this->data = array();
+        // mysqli_connect usa: Host, User, Pass, DB, Port
         $this->conexion = @mysqli_connect(
-            'localhost',  // 1. Host
-            $user,        // 2. Usuario
-            $pass,        // 3. Contraseña
-            $db,          // 4. Base de datos
-            3307          // 5. Puerto (Aquí es donde debe ir)
+            'localhost',
+            $user, 
+            $pass, 
+            $db, 
+            3307
         );
     
         if(!$this->conexion) {
             die('¡Base de datos NO conectada! Error: ' . mysqli_connect_error());
         }
     }
+
+    public function getData() {
+        return json_encode($this->data, JSON_PRETTY_PRINT);
+    }
 }
-?>
